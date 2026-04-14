@@ -1,0 +1,53 @@
+=== customers ===
+('Customer_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Customer_Name', 'varchar(50)', 'NO', '', None, '')
+('Phone_No', 'varchar(15)', 'YES', 'UNI', None, '')
+('City', 'varchar(30)', 'YES', '', 'Mumbai', '')
+
+=== orders ===
+('Order_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Product_ID', 'varchar(10)', 'YES', '', None, '')
+('Supplier_ID', 'varchar(10)', 'YES', '', None, '')
+('Tracking_No', 'varchar(30)', 'YES', 'UNI', None, '')
+('Order_Date', 'date', 'YES', '', '2024-01-01', '')
+
+=== payment ===
+('Payment_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Order_ID', 'int', 'YES', 'MUL', None, '')
+('Amount', 'decimal(10,2)', 'NO', '', None, '')
+('Payment_Mode', 'varchar(20)', 'YES', '', None, '')
+('Payment_Date', 'date', 'YES', '', None, '')
+
+=== product ===
+('Product_ID', 'varchar(10)', 'NO', 'PRI', None, '')
+('Product_name', 'varchar(50)', 'YES', '', None, '')
+('Supplier_ID', 'varchar(10)', 'YES', 'MUL', None, '')
+('Stock', 'int', 'YES', '', None, '')
+('Check_price', 'int', 'YES', '', None, '')
+('Temperature_required', 'int', 'YES', '', None, '')
+
+=== shipment ===
+('Shipment_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Shipment_Date', 'date', 'NO', '', '2024-01-01', '')
+('Order_ID', 'int', 'NO', 'MUL', None, '')
+('Quantity', 'int', 'NO', '', None, '')
+('Tracking_Number', 'varchar(50)', 'YES', 'UNI', None, '')
+
+=== supplier ===
+('Supplier_ID', 'varchar(10)', 'NO', 'PRI', None, '')
+('Phone_No', 'varchar(15)', 'YES', '', None, '')
+('Area', 'varchar(50)', 'YES', '', None, '')
+
+=== test_product ===
+('Product_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Product_Name', 'varchar(50)', 'NO', '', None, '')
+('Supplier_ID', 'int', 'YES', 'MUL', None, '')
+('Price', 'int', 'YES', '', None, '')
+
+=== test_supplier ===
+('Supplier_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Supplier_Name', 'varchar(50)', 'NO', '', None, '')
+('Phone_No', 'varchar(15)', 'YES', 'UNI', None, '')
+('Area', 'varchar(50)', 'YES', '', 'Mumbai', '')
+('Rating', 'int', 'YES', '', None, '')
+

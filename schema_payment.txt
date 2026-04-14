@@ -1,0 +1,5 @@
+('Payment_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Order_ID', 'int', 'YES', 'MUL', None, '')
+('Amount', 'decimal(10,2)', 'NO', '', None, '')
+('Payment_Mode', 'varchar(20)', 'YES', '', None, '')
+('Payment_Date', 'date', 'YES', '', None, '')

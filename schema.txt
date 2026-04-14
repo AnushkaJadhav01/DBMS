@@ -1,0 +1,5 @@
+('Shipment_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Shipment_Date', 'date', 'NO', '', '2024-01-01', '')
+('Order_ID', 'int', 'NO', 'MUL', None, '')
+('Quantity', 'int', 'NO', '', None, '')
+('Tracking_Number', 'varchar(50)', 'YES', 'UNI', None, '')

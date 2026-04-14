@@ -1,0 +1,5 @@
+('Order_ID', 'int', 'NO', 'PRI', None, 'auto_increment')
+('Product_ID', 'varchar(10)', 'YES', '', None, '')
+('Supplier_ID', 'varchar(10)', 'YES', '', None, '')
+('Tracking_No', 'varchar(30)', 'YES', 'UNI', None, '')
+('Order_Date', 'date', 'YES', '', '2024-01-01', '')
