@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-label: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-app-background: #f8f9ff;
+  --color-on-app-background: #0d1c2e;
+  --color-primary: #00288e;
+  --color-primary-container: #1e40af;
+  --color-on-primary: #ffffff;
+  --color-secondary: #9d4300;
+  --color-secondary-container: #fd761a;
+  --color-on-secondary: #ffffff;
+  --color-tertiary: #611e00;
+  --color-surface: #f8f9ff;
+  --color-on-surface: #0d1c2e;
+  --color-on-surface-variant: #444653;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eff4ff;
+  --color-surface-container: #e6eeff;
+  --color-surface-container-high: #dce9ff;
+  --color-surface-container-highest: #d5e3fc;
+  --color-outline: #757684;
+  --color-outline-variant: #c4c5d5;
+  --color-surface-tint: #3755c3;
+  --color-primary-fixed: #dde1ff;
+  --color-secondary-fixed: #ffdbca;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+
+  --radius-full: 9999px;
+  --radius-xl: 1rem;
+  --radius-lg: 0.5rem;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-app-background);
+    color: var(--color-on-app-background);
+    font-family: var(--font-sans);
+  }
+}
+
+.kinetic-shadow {
+  box-shadow: 0 4px 24px rgba(13, 28, 46, 0.06);
+}
+
+.glass-nav {
+  @apply bg-white/80 backdrop-blur-md border-t border-outline-variant/10;
+}
