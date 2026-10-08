@@ -4,7 +4,7 @@ import { Screen, TransitionType, NavigationContextType } from '../types';
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('orders');
+  const [currentScreen, setCurrentScreen] = useState<Screen>('landing');
   const [transition, setTransition] = useState<TransitionType>('none');
   const [params, setParams] = useState<any>(null);
 

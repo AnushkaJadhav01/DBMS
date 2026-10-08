@@ -1,0 +1,74 @@
+[
+    {
+        "algorithm": "Gradient Boosting Regressor",
+        "best_params": {
+            "n_estimators": 15,
+            "learning_rate": 0.15,
+            "max_depth": 4
+        },
+        "cv_mean_r2": 0.9078,
+        "cv_std_r2": 0.0317,
+        "mae": 19.4236,
+        "mse": 989.5323,
+        "rmse": 31.4568,
+        "r2_score": 0.9244
+    },
+    {
+        "algorithm": "Random Forest Regressor",
+        "best_params": {
+            "n_estimators": 20,
+            "max_depth": 5,
+            "min_samples_split": 2
+        },
+        "cv_mean_r2": 0.9019,
+        "cv_std_r2": 0.0436,
+        "mae": 13.8543,
+        "mse": 484.3074,
+        "rmse": 22.007,
+        "r2_score": 0.963
+    },
+    {
+        "algorithm": "Ridge Regression (L2 Linear)",
+        "best_params": {
+            "alpha": 1.0,
+            "lr": 0.01,
+            "epochs": 400
+        },
+        "cv_mean_r2": 0.8818,
+        "cv_std_r2": 0.0578,
+        "mae": 18.8133,
+        "mse": 526.916,
+        "rmse": 22.9547,
+        "r2_score": 0.9597
+    },
+    {
+        "algorithm": "K-Nearest Neighbors Regressor (KNN)",
+        "best_params": {
+            "n_neighbors": 5
+        },
+        "cv_mean_r2": 0.9007,
+        "cv_std_r2": 0.0181,
+        "mae": 12.335,
+        "mse": 333.111,
+        "rmse": 18.2513,
+        "r2_score": 0.9745,
+        "feature_importances": {
+            "hist_avg_demand": 0.9632,
+            "Current_Stock": 0.959,
+            "Category_Diagnostics": 0.7799,
+            "Price": 0.7116,
+            "Temperature_required": 0.6766,
+            "Category_Biologics": 0.4825,
+            "Category_Blood Products": 0.2294,
+            "Category_Lab Reagents": 0.2145,
+            "Category_Vaccines": 0.0978,
+            "Category_Insulin": 0.0834,
+            "order_frequency": 0.0804,
+            "month": 0.0347
+        },
+        "total_records": 200,
+        "train_records": 160,
+        "test_records": 40,
+        "trained_at": "2026-10-09 00:13:54"
+    }
+]

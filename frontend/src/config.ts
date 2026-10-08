@@ -18,11 +18,39 @@ export interface EntityConfig {
 }
 
 export const APP_CONFIG: Record<string, EntityConfig> = {
-  dashboard: {
-    endpoint: '/api/dashboard', // Just for stats later if needed
-    entityName: 'Dashboard',
+  landing: {
+    endpoint: '',
+    entityName: 'Product Home',
     idField: '',
-    icon: 'LayoutDashboard',
+    icon: 'Sparkles',
+    columns: []
+  },
+  predict: {
+    endpoint: '/api/predict-demand',
+    entityName: 'Demand Prediction',
+    idField: '',
+    icon: 'TrendingUp',
+    columns: []
+  },
+  history: {
+    endpoint: '/api/predictions/history',
+    entityName: 'My History',
+    idField: '',
+    icon: 'History',
+    columns: []
+  },
+  admin: {
+    endpoint: '/api/admin/stats',
+    entityName: 'Admin Dashboard',
+    idField: '',
+    icon: 'BarChart3',
+    columns: []
+  },
+  about: {
+    endpoint: '',
+    entityName: 'Documentation',
+    idField: '',
+    icon: 'FileText',
     columns: []
   },
   orders: {

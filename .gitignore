@@ -10,9 +10,6 @@ venv/
 
 # Node
 node_modules/
-dist/
-build/
-.DS_Store
 
 # IDE
 .vscode/
@@ -24,3 +21,6 @@ build/
 Full_Report.pdf
 DBMS_Project_Report_Kunal.md
 scratch/
+
+# NOTE: static/assets and ml/model.pkl are intentionally NOT gitignored
+# They must be committed so Vercel can bundle the frontend + ML model.
