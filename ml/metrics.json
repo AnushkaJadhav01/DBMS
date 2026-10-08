@@ -54,7 +54,7 @@
     "test_records": 200,
     "data_source": "Labelled Synthetic \u2014 generated with fixed seed (42) using realistic cold-chain demand patterns. Not real transaction data.",
     "validation_method": "Chronological split (no shuffle) + walk-forward expanding-window 5-fold CV",
-    "trained_at": "2026-10-09 01:53:40",
+    "trained_at": "2026-10-09 01:58:57",
     "feature_count": 17,
     "feature_names": [
         "Price",
