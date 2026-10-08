@@ -60,13 +60,18 @@ def _ensure_db():
 
 _ensure_db()
 
+@app.route("/static/<path:filename>")
+def serve_static(filename):
+    """Serve static files (JS, CSS, assets) — local dev only. Vercel CDN handles this in production."""
+    return send_from_directory(os.path.join(BASE_DIR, "static"), filename)
+
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def serve_spa(path):
     """Serve the SPA index.html for all non-API, non-static routes."""
-    static_file = os.path.join(BASE_DIR, "static", path)
-    if path and os.path.isfile(static_file):
-        return send_from_directory(os.path.join(BASE_DIR, "static"), path)
+    # Don't handle /static/ here — already handled above (or by Vercel CDN)
+    if path.startswith("static/"):
+        return send_from_directory(BASE_DIR, path)
     return send_from_directory(os.path.join(BASE_DIR, "templates"), "index.html")
 
 
