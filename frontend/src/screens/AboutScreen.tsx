@@ -66,7 +66,7 @@ export default function AboutScreen() {
         <div className="space-y-4 text-xs leading-relaxed">
           <div className="p-4 bg-slate-800/40 rounded-2xl border border-slate-800">
             <h4 className="font-bold text-white mb-1">Q: Why choose Regression over Classification for this dataset?</h4>
-            <p className="text-slate-400">A: Shipped demand quantity is a continuous numerical variable (ranging from 18 to 435 units). Regression allows exact numerical forecasting and confidence interval calculation \([\text{Pred} - \text{MAE}, \text{Pred} + \text{MAE}]\).</p>
+            <p className="text-slate-400">A: Shipped demand quantity is a continuous numerical variable (ranging from 18 to 435 units). Regression allows exact numerical forecasting and confidence interval calculation [Prediction - MAE, Prediction + MAE].</p>
           </div>
           <div className="p-4 bg-slate-800/40 rounded-2xl border border-slate-800">
             <h4 className="font-bold text-white mb-1">Q: How do you prevent data leakage during feature engineering?</h4>
