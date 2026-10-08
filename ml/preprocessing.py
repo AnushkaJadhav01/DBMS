@@ -7,10 +7,6 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.impute import SimpleImputer
 from models.db import get_db
 
 def load_historical_data():
@@ -94,23 +90,75 @@ def load_historical_data():
 
 def build_preprocessing_pipeline(categorical_features, numeric_features):
     """
-    Builds a reproducible sklearn ColumnTransformer pipeline.
+    Returns PureDataPreprocessor instance for pure Python transformation.
     """
-    numeric_transformer = Pipeline(steps=[
-        ('imputer', SimpleImputer(strategy='median')),
-        ('scaler', StandardScaler())
-    ])
+    return PureDataPreprocessor()
 
-    categorical_transformer = Pipeline(steps=[
-        ('imputer', SimpleImputer(strategy='constant', fill_value='Vaccines')),
-        ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
-    ])
+CATEGORIES = ["Vaccines", "Insulin", "Blood Products", "Biologics", "Lab Reagents", "Diagnostics"]
 
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ('num', numeric_transformer, numeric_features),
-            ('cat', categorical_transformer, categorical_features)
+class PureDataPreprocessor:
+    """
+    Pure Python feature scaling and One-Hot Encoding preprocessor.
+    Stores feature statistics (means, stds) learned ONLY from training set.
+    """
+    def __init__(self):
+        self.categories = CATEGORIES
+        self.means = {}
+        self.stds  = {}
+        self.num_cols = [
+            'Price', 'Current_Stock', 'Temperature_required',
+            'lag_1_demand', 'lag_7_demand', 'rolling_mean_28',
+            'month_sin', 'month_cos', 'shelf_life_days', 'lead_time_days', 'is_Q4'
         ]
-    )
 
-    return preprocessor
+    def _extract_raw(self, row):
+        price    = float(row.get('Price', 1000))
+        stock    = float(row.get('Current_Stock', 100))
+        temp     = float(row.get('Temperature_required', 4))
+        lag1     = float(row.get('lag_1_demand', 0))
+        lag7     = float(row.get('lag_7_demand', 0))
+        rm28     = float(row.get('rolling_mean_28', 0))
+        msin     = float(row.get('month_sin', 0))
+        mcos     = float(row.get('month_cos', 1))
+        shelf    = float(row.get('shelf_life_days', 365))
+        lead     = float(row.get('lead_time_days', 7))
+        is_q4    = float(row.get('is_Q4', 0))
+
+        cat = str(row.get('Category', 'Vaccines'))
+        cat_ohe = [1.0 if cat == c else 0.0 for c in self.categories]
+
+        return [price, stock, temp, lag1, lag7, rm28, msin, mcos, shelf, lead, is_q4] + cat_ohe
+
+    def fit_transform(self, rows):
+        import math
+        X_raw, y = [], []
+        for row in rows:
+            X_raw.append(self._extract_raw(row))
+            y.append(float(row['Target_Demand']))
+
+        n_features = len(X_raw[0])
+        for col_idx in range(n_features):
+            vals = [X_raw[i][col_idx] for i in range(len(X_raw))]
+            mean_v = sum(vals) / len(vals)
+            var_v  = sum((v - mean_v)**2 for v in vals) / len(vals)
+            std_v  = math.sqrt(var_v) if var_v > 1e-8 else 1.0
+            self.means[col_idx] = mean_v
+            self.stds[col_idx]  = std_v
+
+        X_scaled = self._scale(X_raw)
+        return X_scaled, y
+
+    def transform(self, rows):
+        X_raw = [self._extract_raw(r) for r in rows]
+        return self._scale(X_raw)
+
+    def _scale(self, X_raw):
+        return [
+            [(val - self.means.get(j, 0)) / self.stds.get(j, 1)
+             for j, val in enumerate(row)]
+            for row in X_raw
+        ]
+
+    def get_feature_names(self):
+        return self.num_cols + [f"Category_{c}" for c in self.categories]
+

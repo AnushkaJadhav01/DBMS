@@ -65,13 +65,21 @@ class TestAPIEndpoints(unittest.TestCase):
         data_login = res_login.get_json()
         self.assertEqual(data_login["user"]["email"], "demo@coldchain.com")
 
+    def _login_admin(self):
+        self.client.post('/api/auth/login', json={
+            "email": "demo@coldchain.com",
+            "password": "demo123"
+        })
+
     def test_admin_stats(self):
+        self._login_admin()
         res = self.client.get('/api/admin/stats')
         self.assertEqual(res.status_code, 200)
         data = res.get_json()
         self.assertIn("analytics", data)
 
     def test_admin_export_csv(self):
+        self._login_admin()
         res = self.client.get('/api/admin/export-csv')
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.mimetype, "text/csv")

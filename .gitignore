@@ -24,3 +24,5 @@ scratch/
 
 # NOTE: static/assets and ml/model.pkl are intentionally NOT gitignored
 # They must be committed so Vercel can bundle the frontend + ML model.
+
+.vercel
