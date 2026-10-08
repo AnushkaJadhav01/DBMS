@@ -4,15 +4,14 @@
 # Engineers lag & aggregate features without data leakage.
 # ============================================================
 
-import pandas as pd
-import numpy as np
+import math
 from datetime import datetime
 from models.db import get_db
 
 def load_historical_data():
     """
     Queries historical order, shipment, and product records from DBMS.
-    Calculates features prior to each order date to prevent data leakage.
+    Calculates features prior to each order date in Pure Python without data leakage.
     """
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
@@ -41,52 +40,50 @@ def load_historical_data():
     conn.close()
 
     if not rows:
-        return pd.DataFrame()
+        return []
 
-    df = pd.DataFrame(rows)
-    df['Order_Date'] = pd.to_datetime(df['Order_Date'])
-
-    # Default category if missing
-    df['Category'] = df['Category'].fillna('Vaccines')
-    df['Price'] = pd.to_numeric(df['Price'], errors='coerce').fillna(1000)
-    df['Current_Stock'] = pd.to_numeric(df['Current_Stock'], errors='coerce').fillna(100)
-    df['Temperature_required'] = pd.to_numeric(df['Temperature_required'], errors='coerce').fillna(4)
-
-    # Historical aggregations computed chronologically (no leakage)
-    hist_avg_demand = []
-    order_frequency = []
-    month_list = []
-    dayofweek_list = []
-
+    processed = []
     product_history = {} # product_id -> list of past quantities
 
-    for idx, row in df.iterrows():
-        pid = row['Product_ID']
+    for row in rows:
+        pid = str(row.get('Product_ID', 'UNKNOWN'))
+        target_demand = float(row.get('Target_Demand', 0))
         past_q = product_history.get(pid, [])
 
-        avg_d = float(np.mean(past_q)) if len(past_q) > 0 else float(row['Target_Demand'])
+        avg_d = float(sum(past_q) / len(past_q)) if past_q else target_demand
         freq = len(past_q)
 
-        hist_avg_demand.append(avg_d)
-        order_frequency.append(freq)
+        dt_str = str(row.get('Order_Date', '2020-01-01'))
+        try:
+            dt = datetime.strptime(dt_str.split(' ')[0], "%Y-%m-%d")
+            month = dt.month
+            dayofweek = dt.weekday()
+        except Exception:
+            month = 1
+            dayofweek = 0
 
-        m = row['Order_Date'].month if pd.notnull(row['Order_Date']) else 1
-        dow = row['Order_Date'].dayofweek if pd.notnull(row['Order_Date']) else 0
+        processed.append({
+            'Shipment_ID': row.get('Shipment_ID'),
+            'Order_ID': row.get('Order_ID'),
+            'Product_ID': pid,
+            'Product_name': row.get('Product_name', ''),
+            'Category': row.get('Category') or 'Vaccines',
+            'Price': float(row.get('Price') or 1000),
+            'Current_Stock': float(row.get('Current_Stock') or 100),
+            'Temperature_required': float(row.get('Temperature_required') or 4),
+            'Target_Demand': target_demand,
+            'Order_Date': dt_str,
+            'hist_avg_demand': avg_d,
+            'order_frequency': freq,
+            'month': month,
+            'dayofweek': dayofweek
+        })
 
-        month_list.append(m)
-        dayofweek_list.append(dow)
-
-        # Record this order's quantity into product history AFTER computing features
         if pid not in product_history:
             product_history[pid] = []
-        product_history[pid].append(row['Target_Demand'])
+        product_history[pid].append(target_demand)
 
-    df['hist_avg_demand'] = hist_avg_demand
-    df['order_frequency'] = order_frequency
-    df['month'] = month_list
-    df['dayofweek'] = dayofweek_list
-
-    return df
+    return processed
 
 def build_preprocessing_pipeline(categorical_features, numeric_features):
     """
